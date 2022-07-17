@@ -91,7 +91,6 @@ export default {
         
         actions: {
           onChangeField(fieldValue) {
-            console.log(fieldValue)
             this.set(`buffered.${fieldName}`, fieldValue.id);
           }
         }
