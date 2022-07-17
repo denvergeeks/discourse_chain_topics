@@ -1,5 +1,5 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
-import { isDefined, fieldInputTypes } from "../lib/topic-custom-field";
+import { fieldInputTypes, isDefined } from "../lib/topic-custom-field";
 
 export default {
   name: "topic-custom-field-intializer",
@@ -43,7 +43,7 @@ export default {
             }
 
             let props = {
-              fieldName: fieldName,
+              fieldName,
               fieldValue: model.get(fieldName),
             };
             component.setProperties(
@@ -96,7 +96,7 @@ export default {
             const model = attrs.model;
 
             let props = {
-              fieldName: fieldName,
+              fieldName,
               fieldValue: model.get(fieldName),
             };
             component.setProperties(
@@ -161,10 +161,8 @@ export default {
           setupComponent(attrs, component) {
             const model = attrs.model;
             const controller = container.lookup("controller:topic");
-            const controllerPost = container.lookup("controller:post");
-
             component.setProperties({
-              fieldName: fieldName,
+              fieldName,
               fieldValue: model.get(fieldName),
               nextTopic: model.get("next_topic") || 0,
               previousTopic: model.get("previous_topic") || 0,
@@ -176,22 +174,30 @@ export default {
               didInsertElement: function () {
                 document.addEventListener("keydown", function (e) {
                   //check if editing a topic:
-                  if (controller.get("editingTopic")) return;
+                  if (controller.get("editingTopic")) {
+                    return;
+                  }
 
                   // check if coomposer open:
                   const composer = controller.get("composer");
                   if (composer.model) {
-                    if (composer.model.composeState === "open") return;
+                    if (composer.model.composeState === "open") {
+                      return;
+                    }
                   }
                   switch (e.key) {
                     case "ArrowLeft": //lef arrow
                       const prevAnchor =
                         document.getElementById("previous_topic");
-                      if (prevAnchor) prevAnchor.click();
+                      if (prevAnchor) {
+                        prevAnchor.click();
+                      }
                       break;
                     case "ArrowRight": // right arrow
                       const nextAnchor = document.getElementById("next_topic");
-                      if (nextAnchor) nextAnchor.click();
+                      if (nextAnchor) {
+                        nextAnchor.click();
+                      }
                       break;
                   }
                 });
@@ -200,7 +206,9 @@ export default {
             });
 
             controller.addObserver("editingTopic", () => {
-              if (this._state === "destroying") return;
+              if (this._state === "destroying") {
+                return;
+              }
               component.set(
                 "showField",
                 !controller.get("editingTopic") &&
@@ -209,7 +217,9 @@ export default {
             });
 
             model.addObserver(fieldName, () => {
-              if (this._state === "destroying") return;
+              if (this._state === "destroying") {
+                return;
+              }
               component.set("fieldValue", model.get(fieldName));
             });
           },
@@ -237,7 +247,7 @@ export default {
              *              support js.
              * references:  app/assets/javascripts/discourse/app/components/topic-list-item.js.es6,
              *              app/assets/javascripts/discourse/app/helpers/raw-plugin-outlet.js.es6
-             
+
             api.modifyClass('component:topic-list-item', {
               customFieldName: fieldName,
               customFieldValue: alias(`topic.${fieldName}`),

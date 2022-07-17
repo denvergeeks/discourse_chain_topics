@@ -1,7 +1,7 @@
 {
-  "name": "discourse-plugin-name",
+  "name": "discourse-chain-topics",
   "version": "0.0.1",
-  "repository": "TODO",
+  "repository": "https://github.com/zaatdev/discourse-chain-topics",
   "author": "Discourse",
   "license": "MIT",
   "devDependencies": {
