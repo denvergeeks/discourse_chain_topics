@@ -2,7 +2,7 @@ Note: This plugin still in under development.
 
 # **Discourse Topic Chain** Plugin
 
-This a discourse plugin which adds a feateur where it would be possible to chain topics. A topic can have other topic to be it's next or previous topic. 
+This a discourse plugin which adds a feature where it would be possible to chain topics. A topic can have other topic to be it's next or previous topic. 
 
 ## Example Usage and Features
 
