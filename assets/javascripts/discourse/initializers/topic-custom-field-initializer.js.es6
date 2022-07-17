@@ -142,7 +142,8 @@ export default {
         setupComponent(attrs, component) {
           const model = attrs.model;
           const controller = container.lookup('controller:topic');
-          
+          const controllerPost = container.lookup('controller:post');
+
           component.setProperties({
             fieldName: fieldName,
             fieldValue: model.get(fieldName),
@@ -152,7 +153,16 @@ export default {
             showPrevious: ! (model.get('previous_topic') === 0),
             showField: !controller.get('editingTopic') && isDefined(model.get(fieldName)),
             didInsertElement:function() {
-             document.addEventListener('keydown', function(e) {                
+             document.addEventListener('keydown', function(e) {
+
+              //check if editing a topic:
+              if (controller.get('editingTopic')) return;
+
+              // check if coomposer open:
+              const composer = controller.get("composer")
+              if (composer.model){
+                if (composer.model.composeState === 'open') return;
+              }
                 switch(e.key){
                   case "ArrowLeft": //lef arrow
                   const prevAnchor = document.getElementById("previous_topic")
