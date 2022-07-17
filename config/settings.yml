@@ -1,0 +1,4 @@
+plugins:
+  discourse_chain_topic:
+    default: true
+    client: true

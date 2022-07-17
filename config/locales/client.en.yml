@@ -1,0 +1,10 @@
+en:
+  js:
+    next_topic:
+      label: "Next Topic"
+      placeholder: "Next Topic"
+    previous_topic:
+      label: "Previous Topic"
+    choose_next_topic:
+      label: "Choose Next Topic"
+    
