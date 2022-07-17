@@ -4,14 +4,11 @@ function isDefined(value) {
 
 function fieldInputTypes(fieldType) {
   return {
-    isBoolean: fieldType === 'boolean',
-    isString: fieldType === 'string',
-    isInteger: fieldType === 'integer',
-    isJson: fieldType === 'json'
-  }
+    isBoolean: fieldType === "boolean",
+    isString: fieldType === "string",
+    isInteger: fieldType === "integer",
+    isJson: fieldType === "json",
+  };
 }
 
-export {
-  isDefined,
-  fieldInputTypes
-}
+export { isDefined, fieldInputTypes };

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # name: discourse_chain_topics
-# about: This a discourse plugin which adds a feateur where it would be possible to chain topics. A topic can have other topic to be it's next or previous topic. 
+# about: This a discourse plugin which adds a feateur where it would be possible to chain topics. A topic can have other topic to be it's next or previous topic.
 # version: 0.0.1
 # authors: Ghassanmas; https://github.com/ghassanmas https://ghaasan.blog
 # url: https://github.com/zaatdev/discourse-chain-topics
@@ -10,9 +10,9 @@
 enabled_site_setting :discourse_chain_topics
 
 after_initialize do
-    NEXT_TOPIC = 'next_topic'
+  NEXT_TOPIC = 'next_topic'
     PREVIOUS_TOPIC = 'previous_topic'
-    ## 
+    ##
     # type:        step
     # number:      1
     # title:       Register the field
@@ -23,7 +23,7 @@ after_initialize do
     ##
     register_topic_custom_field_type('next_topic', :integer)
     register_topic_custom_field_type('previous_topic', :integer)
-    
+
     ##
     # type:        step
     # number:      2
@@ -32,7 +32,7 @@ after_initialize do
     #              It means you can handle data validation or normalisation, and
     #              it lets you easily change where you're storing the data.
     ##
-    
+
     ##
     # type:        step
     # number:      2.1
@@ -56,7 +56,6 @@ after_initialize do
       end
     end
 
-    
     ##
     # type:        step
     # number:      2.2
@@ -68,9 +67,9 @@ after_initialize do
     add_to_class(:topic, "#{NEXT_TOPIC}=") do |value|
       custom_fields[NEXT_TOPIC] = value
     end
-    
+
     add_to_class(:topic, "#{PREVIOUS_TOPIC}=") do |value|
-     custom_fields[PREVIOUS_TOPIC] = value
+      custom_fields[PREVIOUS_TOPIC] = value
     end
 
     ##
@@ -81,7 +80,7 @@ after_initialize do
     #              many of the topic update classes are associated with the post
     #              update classes.
     ##
-    
+
     ##
     # type:        step
     # number:      3.1
@@ -96,8 +95,8 @@ after_initialize do
       topic.send("#{PREVIOUS_TOPIC}=".to_sym, opts[PREVIOUS_TOPIC.to_sym])
       topic.save!
     end
-    
-    ## 
+
+    ##
     # type:        step
     # number:      3.2
     # title:       Update on topic edit
@@ -111,7 +110,7 @@ after_initialize do
       tc.record_change(NEXT_TOPIC, tc.topic.send(NEXT_TOPIC), value)
       tc.topic.send("#{NEXT_TOPIC}=".to_sym, value.present? ? value : nil)
     end
-  
+
     PostRevisor.track_topic_field(PREVIOUS_TOPIC.to_sym) do |tc, value|
       tc.record_change(PREVIOUS_TOPIC, tc.topic.send(PREVIOUS_TOPIC), value)
       tc.topic.send("#{PREVIOUS_TOPIC}=".to_sym, value.present? ? value : nil)
@@ -124,8 +123,8 @@ after_initialize do
     # description: Send our field to the client, along with the other topic
     #              fields.
     ##
-    
-    ## 
+
+    ##
     # type:        step
     # number:      4.1
     # title:       Serialize to the topic
@@ -146,7 +145,7 @@ after_initialize do
     # title:       Preload the field
     # description: Discourse preloads custom fields on listable models (i.e.
     #              categories or topics) before serializing them. This is to
-    #              avoid running a potentially large number of SQL queries 
+    #              avoid running a potentially large number of SQL queries
     #              ("N+1 Queries") at the point of serialization, which would
     #              cause performance to be affected.
     # references:  lib/plugins/instance.rb,
@@ -154,7 +153,6 @@ after_initialize do
     #              app/models/concerns/has_custom_fields.rb
     ##
 
-  
     ##
     # type:        step
     # number:      4.3
@@ -176,7 +174,7 @@ after_initialize do
         end
       end
     end
-  
+
     DiscourseEvent.on(:post_edited) do |post, topic_changed|
       if topic_changed
         if not post.topic.next_topic.to_i.zero?

@@ -1,12 +1,12 @@
-import { withPluginApi } from 'discourse/lib/plugin-api';
-import { isDefined, fieldInputTypes } from '../lib/topic-custom-field';
+import { withPluginApi } from "discourse/lib/plugin-api";
+import { isDefined, fieldInputTypes } from "../lib/topic-custom-field";
 
 export default {
   name: "topic-custom-field-intializer",
   initialize(container) {
-    const fieldName = 'next_topic'
-    const fieldType = 'integer';
-    withPluginApi('0.11.2', api => {  
+    const fieldName = "next_topic";
+    const fieldType = "integer";
+    withPluginApi("0.11.2", (api) => {
       /*
        * type:        step
        * number:      5
@@ -16,7 +16,7 @@ export default {
        * references:  app/assets/javascripts/discourse/app/templates/composer.hbs,
        *              app/assets/javascripts/discourse/app/components/plugin-outlet.js.es6
        */
-      
+
       /*
        * type:        step
        * number:      5.1
@@ -25,30 +25,40 @@ export default {
        *              composer connector template.
        * references:  app/assets/javascripts/discourse/app/components/plugin-outlet.js.es6
        */
-      api.registerConnectorClass('composer-fields', 'composer-topic-custom-field-container', {
-        setupComponent(attrs, component) {
-          const model = attrs.model;
-          
-          // If the first post is being edited we need to pass our value from
-          // the topic model to the composer model.
-          if (!isDefined(model[fieldName]) && model.topic && model.topic[fieldName]) {
-            model.set(fieldName, model.topic[fieldName]);
-          }
-          
-          let props = {
-            fieldName: fieldName,
-            fieldValue: model.get(fieldName)
-          }
-          component.setProperties(Object.assign(props, fieldInputTypes(fieldType)));
-        },
-        
-        actions: {
-          onChangeField(fieldValue) {
-             this.set(`model.${fieldName}`, fieldValue);
-          }
+      api.registerConnectorClass(
+        "composer-fields",
+        "composer-topic-custom-field-container",
+        {
+          setupComponent(attrs, component) {
+            const model = attrs.model;
+
+            // If the first post is being edited we need to pass our value from
+            // the topic model to the composer model.
+            if (
+              !isDefined(model[fieldName]) &&
+              model.topic &&
+              model.topic[fieldName]
+            ) {
+              model.set(fieldName, model.topic[fieldName]);
+            }
+
+            let props = {
+              fieldName: fieldName,
+              fieldValue: model.get(fieldName),
+            };
+            component.setProperties(
+              Object.assign(props, fieldInputTypes(fieldType))
+            );
+          },
+
+          actions: {
+            onChangeField(fieldValue) {
+              this.set(`model.${fieldName}`, fieldValue);
+            },
+          },
         }
-      });
-      
+      );
+
       /*
        * type:        step
        * number:      5.2
@@ -58,7 +68,7 @@ export default {
        * location:    plugins/discourse-topic-custom-fields/assets/javascripts/discourse/connectors/composer-fields/composer-topic-custom-field-container.hbs
        * references:  app/assets/javascripts/discourse/app/templates/composer.hbs
        */
-      
+
       /*
        * type:        step
        * number:      6
@@ -69,7 +79,7 @@ export default {
        * references:  app/assets/javascripts/discourse/app/templates/topic.hbs,
        *              app/assets/javascripts/discourse/app/components/plugin-outlet.js.es6
        */
-      
+
       /*
        * type:        step
        * number:      6.1
@@ -78,24 +88,30 @@ export default {
        *              topic connector template.
        * references:  app/assets/javascripts/discourse/app/components/plugin-outlet.js.es6
        */
-      api.registerConnectorClass('edit-topic', 'edit-topic-custom-field-container', {
-        setupComponent(attrs, component) {
-          const model = attrs.model;
-          
-          let props = {
-            fieldName: fieldName,
-            fieldValue: model.get(fieldName)
-          }
-          component.setProperties(Object.assign(props, fieldInputTypes(fieldType)));
-        },
-        
-        actions: {
-          onChangeField(fieldValue) {
-            this.set(`buffered.${fieldName}`, fieldValue.id);
-          }
+      api.registerConnectorClass(
+        "edit-topic",
+        "edit-topic-custom-field-container",
+        {
+          setupComponent(attrs, component) {
+            const model = attrs.model;
+
+            let props = {
+              fieldName: fieldName,
+              fieldValue: model.get(fieldName),
+            };
+            component.setProperties(
+              Object.assign(props, fieldInputTypes(fieldType))
+            );
+          },
+
+          actions: {
+            onChangeField(fieldValue) {
+              this.set(`buffered.${fieldName}`, fieldValue.id);
+            },
+          },
         }
-      });
-      
+      );
+
       /*
        * type:        step
        * number:      6.2
@@ -105,7 +121,7 @@ export default {
        * location:    plugins/discourse-topic-custom-fields/assets/javascripts/discourse/connectors/edit-topic/edit-topic-custom-field-container.hbs
        * references:  app/assets/javascripts/discourse/app/templates/topic.hbs
        */
-         
+
       /*
        * type:        step
        * number:      7
@@ -119,16 +135,16 @@ export default {
       api.serializeOnCreate(fieldName);
       api.serializeToDraft(fieldName);
       api.serializeToTopic(fieldName, `topic.${fieldName}`);
-      
+
       /*
        * type:        step
        * number:      8
        * title:       Display your field value
-       * description: Display the value of your custom topic field below the 
+       * description: Display the value of your custom topic field below the
        *              title in the topic, and after the title in the topic
        *              list.
        */
-      
+
       /*
        * type:        step
        * number:      8.1
@@ -138,62 +154,68 @@ export default {
        *              connector template.
        * references:  app/assets/javascripts/discourse/app/components/plugin-outlet.js.es6
        */
-      api.registerConnectorClass('topic-title', 'topic-title-custom-field-container', {
-        setupComponent(attrs, component) {
-          const model = attrs.model;
-          const controller = container.lookup('controller:topic');
-          const controllerPost = container.lookup('controller:post');
+      api.registerConnectorClass(
+        "topic-title",
+        "topic-title-custom-field-container",
+        {
+          setupComponent(attrs, component) {
+            const model = attrs.model;
+            const controller = container.lookup("controller:topic");
+            const controllerPost = container.lookup("controller:post");
 
-          component.setProperties({
-            fieldName: fieldName,
-            fieldValue: model.get(fieldName),
-            nextTopic: model.get('next_topic') || 0,
-            previousTopic: model.get('previous_topic') || 0,
-            showNext: ! (model.get('next_topic') === 0),
-            showPrevious: ! (model.get('previous_topic') === 0),
-            showField: !controller.get('editingTopic') && isDefined(model.get(fieldName)),
-            didInsertElement:function() {
-             document.addEventListener('keydown', function(e) {
+            component.setProperties({
+              fieldName: fieldName,
+              fieldValue: model.get(fieldName),
+              nextTopic: model.get("next_topic") || 0,
+              previousTopic: model.get("previous_topic") || 0,
+              showNext: !(model.get("next_topic") === 0),
+              showPrevious: !(model.get("previous_topic") === 0),
+              showField:
+                !controller.get("editingTopic") &&
+                isDefined(model.get(fieldName)),
+              didInsertElement: function () {
+                document.addEventListener("keydown", function (e) {
+                  //check if editing a topic:
+                  if (controller.get("editingTopic")) return;
 
-              //check if editing a topic:
-              if (controller.get('editingTopic')) return;
+                  // check if coomposer open:
+                  const composer = controller.get("composer");
+                  if (composer.model) {
+                    if (composer.model.composeState === "open") return;
+                  }
+                  switch (e.key) {
+                    case "ArrowLeft": //lef arrow
+                      const prevAnchor =
+                        document.getElementById("previous_topic");
+                      if (prevAnchor) prevAnchor.click();
+                      break;
+                    case "ArrowRight": // right arrow
+                      const nextAnchor = document.getElementById("next_topic");
+                      if (nextAnchor) nextAnchor.click();
+                      break;
+                  }
+                });
+                //              window.addEventListener('keypress', this.boundOnKeyPress);
+              },
+            });
 
-              // check if coomposer open:
-              const composer = controller.get("composer")
-              if (composer.model){
-                if (composer.model.composeState === 'open') return;
-              }
-                switch(e.key){
-                  case "ArrowLeft": //lef arrow
-                  const prevAnchor = document.getElementById("previous_topic")
-                  if (prevAnchor) prevAnchor.click()
-                  break;
-                  case "ArrowRight":// right arrow 
-                  const nextAnchor = document.getElementById("next_topic")
-                  if(nextAnchor) nextAnchor.click()
-                  break;
-                }
-              })
-//              window.addEventListener('keypress', this.boundOnKeyPress);
-            },
-          
-          });
+            controller.addObserver("editingTopic", () => {
+              if (this._state === "destroying") return;
+              component.set(
+                "showField",
+                !controller.get("editingTopic") &&
+                  isDefined(model.get(fieldName))
+              );
+            });
 
-        
-    
-
-          controller.addObserver('editingTopic', () => {
-            if (this._state === 'destroying') return;
-            component.set('showField', !controller.get('editingTopic') && isDefined(model.get(fieldName)));
-          });
-          
-          model.addObserver(fieldName, () => {
-            if (this._state === 'destroying') return;
-            component.set('fieldValue', model.get(fieldName));
-          });
+            model.addObserver(fieldName, () => {
+              if (this._state === "destroying") return;
+              component.set("fieldValue", model.get(fieldName));
+            });
+          },
         }
-      });
-      
+      );
+
       /*
        * type:        step
        * number:      8.2
@@ -204,27 +226,27 @@ export default {
        * location:    plugins/discourse-topic-custom-fields/assets/javascripts/discourse/connectors/topic-title/topic-title-custom-field-container.hbs
        * references:  app/assets/javascripts/discourse/app/templates/topic.hbs
        */
-      
+
       /*
-       * type:        step
-       * number:      8.3
-       * title:       Setup the topic list item component
-       * description: Setup the properties you'll need in the topic list item
-       *              template. You can't do this in a connector js file, as
-       *              the topic list item is a raw template, which doesn't
-       *              support js.
-       * references:  app/assets/javascripts/discourse/app/components/topic-list-item.js.es6,
-       *              app/assets/javascripts/discourse/app/helpers/raw-plugin-outlet.js.es6
-       
-      api.modifyClass('component:topic-list-item', {
-        customFieldName: fieldName,
-        customFieldValue: alias(`topic.${fieldName}`),
-        nextTopic: alias(`topic.next_topic`),
-        previousTopic: alias(`topic.previous_topic`),
-        showNext: true, //!(model.get('next_topic') === 0),
-        showPrevious: true,//! (model.get('previous_topic') === 0),
-      });
-      */
+             * type:        step
+             * number:      8.3
+             * title:       Setup the topic list item component
+             * description: Setup the properties you'll need in the topic list item
+             *              template. You can't do this in a connector js file, as
+             *              the topic list item is a raw template, which doesn't
+             *              support js.
+             * references:  app/assets/javascripts/discourse/app/components/topic-list-item.js.es6,
+             *              app/assets/javascripts/discourse/app/helpers/raw-plugin-outlet.js.es6
+             
+            api.modifyClass('component:topic-list-item', {
+              customFieldName: fieldName,
+              customFieldValue: alias(`topic.${fieldName}`),
+              nextTopic: alias(`topic.next_topic`),
+              previousTopic: alias(`topic.previous_topic`),
+              showNext: true, //!(model.get('next_topic') === 0),
+              showPrevious: true,//! (model.get('previous_topic') === 0),
+            });
+            */
       /*
        * type:        step
        * number:      8.4
@@ -236,5 +258,5 @@ export default {
        * references:  app/assets/javascripts/discourse/app/templates/list/topic-list-item.hbr
        */
     });
-  }
-}
+  },
+};
