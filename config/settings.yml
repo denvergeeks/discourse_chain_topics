@@ -1,4 +1,4 @@
 plugins:
-  discourse_chain_topic:
+  discourse_chain_topics:
     default: true
     client: true
