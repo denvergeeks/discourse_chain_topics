@@ -1,7 +1,7 @@
 {
-  "name": "discourse-chain-topics",
+  "name": "discourse_chain_topics",
   "version": "0.0.1",
-  "repository": "https://github.com/zaatdev/discourse-chain-topics",
+  "repository": "https://github.com/denvergeeks/discourse_chain_topics",
   "author": "Discourse",
   "license": "MIT",
   "devDependencies": {
